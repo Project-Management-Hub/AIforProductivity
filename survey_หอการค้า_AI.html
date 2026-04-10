@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบสำรวจความพร้อม AI | หอการค้า</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1B3472;
+            --teal: #2AB5A0;
+            --purple: #6B3FA0;
+            --gold: #F5A623;
+            --bg: #F4F6FA;
+            --card: #FFFFFF;
+            --text: #23272F;
+            --text-light: #6B7280;
+            --border: #E2E6EE;
+            --error: #E53E3E;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--navy) 0%, #253D80 60%, var(--purple) 100%);
+            color: #fff;
+            padding: 48px 24px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--teal), var(--gold), var(--purple));
+        }
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: 0.02em;
+        }
+        .header .course-name {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--gold);
+            margin-bottom: 4px;
+        }
+        .header .subtitle {
+            font-size: 1rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        .header .meta {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        /* Objective box */
+        .objective {
+            max-width: 720px;
+            margin: -20px auto 0;
+            padding: 20px 28px;
+            background: var(--card);
+            border-radius: 12px;
+            border-left: 5px solid var(--teal);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            position: relative;
+            z-index: 2;
+            font-size: 0.93rem;
+            color: var(--text-light);
+        }
+        .objective strong {
+            color: var(--navy);
+            display: block;
+            margin-bottom: 4px;
+            font-size: 1rem;
+        }
+
+        /* Form container */
+        .form-wrap {
+            max-width: 720px;
+            margin: 28px auto 48px;
+            padding: 0 16px;
+        }
+
+        /* Section card */
+        .section {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 32px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            border: 1px solid var(--border);
+        }
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 24px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--teal);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .num {
+            background: var(--navy);
+            color: #fff;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        /* Question */
+        .question {
+            margin-bottom: 26px;
+        }
+        .question:last-child { margin-bottom: 0; }
+        .q-label {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+        .q-hint {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+        .required::after {
+            content: ' *';
+            color: var(--error);
+        }
+
+        /* Text input */
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 1rem;
+            color: var(--text);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #FAFBFD;
+        }
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(42,181,160,0.12);
+            background: #fff;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Radio & Checkbox */
+        .option-list { list-style: none; }
+        .option-list li {
+            margin-bottom: 6px;
+        }
+        .option-list label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 0.95rem;
+        }
+        .option-list label:hover {
+            background: #F0F4FA;
+        }
+        .option-list input[type="radio"],
+        .option-list input[type="checkbox"] {
+            margin-top: 4px;
+            accent-color: var(--teal);
+            width: 18px; height: 18px;
+            flex-shrink: 0;
+        }
+
+        /* Other text input inline */
+        .other-input {
+            margin-top: 4px;
+            margin-left: 28px;
+            width: calc(100% - 28px);
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+
+        /* Table-style question (Section 3) */
+        .topic-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .topic-table thead th {
+            background: var(--navy);
+            color: #fff;
+            padding: 10px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: left;
+        }
+        .topic-table thead th:first-child {
+            width: 36px;
+            text-align: center;
+            border-radius: 8px 0 0 0;
+        }
+        .topic-table thead th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+        .topic-table tbody td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.93rem;
+            vertical-align: top;
+        }
+        .topic-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .topic-table tbody tr:hover {
+            background: #F6F9FE;
+        }
+        .topic-table tbody td:first-child {
+            text-align: center;
+        }
+        .topic-table tbody td:first-child input {
+            accent-color: var(--teal);
+            width: 18px; height: 18px;
+        }
+        .topic-table .tool-tag {
+            display: inline-block;
+            font-size: 0.78rem;
+            color: var(--purple);
+            background: #F3EEFB;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin: 2px 2px 2px 0;
+        }
+
+        /* Submit */
+        .submit-wrap {
+            text-align: center;
+            padding: 16px 0 0;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, var(--teal), #22A08D);
+            color: #fff;
+            border: none;
+            padding: 14px 56px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 14px rgba(42,181,160,0.3);
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(42,181,160,0.4);
+        }
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px 16px 36px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .footer a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            background: var(--navy);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+            z-index: 999;
+            transition: transform 0.4s ease;
+            text-align: center;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast.error {
+            background: var(--error);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header { padding: 32px 16px 28px; }
+            .header h1 { font-size: 1.35rem; }
+            .header .course-name { font-size: 1.05rem; }
+            .section { padding: 24px 18px; }
+            .objective { margin: -16px 16px 0; padding: 16px 20px; }
+            .topic-table thead { display: none; }
+            .topic-table, .topic-table tbody, .topic-table tr, .topic-table td {
+                display: block;
+            }
+            .topic-table tbody tr {
+                padding: 12px 0;
+                border-bottom: 1px solid var(--border);
+            }
+            .topic-table tbody td {
+                padding: 4px 12px;
+                border-bottom: none;
+            }
+            .topic-table tbody td:first-child {
+                text-align: left;
+                display: inline-block;
+                vertical-align: middle;
+            }
+            .topic-table tbody td:nth-child(2) {
+                font-weight: 600;
+                display: inline;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <h1>แบบสำรวจความพร้อมผู้เข้าร่วมอบรม</h1>
+    <div class="course-name">หลักสูตร AI for Productivity</div>
+    <div class="subtitle">ปัญญาประดิษฐ์เพื่อเพิ่มประสิทธิภาพการทำงานสำหรับผู้ประกอบการ SME</div>
+    <div class="meta">
+        วันพุธที่ 29 เมษายน 2569 | สภาหอการค้าแห่งประเทศไทย<br>
+        จัดโดย Innovate AI Co., Ltd.
+    </div>
+</div>
+
+<!-- Objective -->
+<div class="objective">
+    <strong>วัตถุประสงค์ของแบบสำรวจ</strong>
+    แบบสำรวจฉบับนี้จัดทำขึ้นเพื่อประเมินพื้นฐานความรู้ด้าน AI และสำรวจหัวข้อที่ท่านประสงค์จะเรียนรู้ เพื่อให้คณะวิทยากรสามารถปรับเนื้อหาและกรณีศึกษาให้สอดคล้องกับผู้เข้าร่วมอบรมมากที่สุด กรุณากรอกแบบสำรวจล่วงหน้าอย่างน้อย 10 วันก่อนวันอบรม ข้อมูลของท่านจะถูกใช้เพื่อการจัดเตรียมการอบรมเท่านั้น
+</div>
+
+<form id="surveyForm" class="form-wrap" onsubmit="return handleSubmit(event)">
+
+    <!-- ส่วนที่ 1 -->
+    <div class="section">
+        <div class="section-title"><span class="num">1</span> ข้อมูลทั่วไปของผู้เข้าร่วมอบรม</div>
+
+        <div class="question">
+            <div class="q-label required">ชื่อ-นามสกุล</div>
+            <input type="text" name="fullname" required placeholder="กรอกชื่อ-นามสกุล">
+        </div>
+
+        <div class="question">
+            <div class="q-label required">ชื่อบริษัท/หน่วยงาน</div>
+            <input type="text" name="company" required placeholder="กรอกชื่อบริษัทหรือหน่วยงาน">
+        </div>
+
+        <div class="question">
+            <div class="q-label required">ตำแหน่ง</div>
+            <input type="text" name="position" required placeholder="กรอกตำแหน่ง">
+        </div>
+
+        <div class="question">
+            <div class="q-label required">ประเภทธุรกิจ/สายงานของท่าน</div>
+            <div class="q-hint">กรุณาเลือก 1 ข้อ</div>
+            <ul class="option-list">
+                <li><label><input type="radio" name="business_type" value="ค้าปลีก / ค้าส่ง" required> ค้าปลีก / ค้าส่ง</label></li>
+                <li><label><input type="radio" name="business_type" value="อาหาร / ร้านอาหาร / เครื่องดื่ม"> อาหาร / ร้านอาหาร / เครื่องดื่ม</label></li>
+                <li><label><input type="radio" name="business_type" value="บริการ (โรงแรม, ท่องเที่ยว, ซ่อมบำรุง, ขนส่ง ฯลฯ)"> บริการ (โรงแรม, ท่องเที่ยว, ซ่อมบำรุง, ขนส่ง ฯลฯ)</label></li>
+                <li><label><input type="radio" name="business_type" value="นำเข้า-ส่งออก / การค้าระหว่างประเทศ"> นำเข้า-ส่งออก / การค้าระหว่างประเทศ</label></li>
+                <li><label><input type="radio" name="business_type" value="อุตสาหกรรมการผลิต / โรงงาน"> อุตสาหกรรมการผลิต / โรงงาน</label></li>
+                <li><label><input type="radio" name="business_type" value="อสังหาริมทรัพย์ / ก่อสร้าง"> อสังหาริมทรัพย์ / ก่อสร้าง</label></li>
+                <li><label><input type="radio" name="business_type" value="การศึกษา / สถาบันการศึกษา"> การศึกษา / สถาบันการศึกษา</label></li>
+                <li><label><input type="radio" name="business_type" value="การเงิน / ประกันภัย / บัญชี"> การเงิน / ประกันภัย / บัญชี</label></li>
+                <li><label><input type="radio" name="business_type" value="เทคโนโลยี / IT / ซอฟต์แวร์"> เทคโนโลยี / IT / ซอฟต์แวร์</label></li>
+                <li>
+                    <label><input type="radio" name="business_type" value="อื่นๆ" id="biz_other_radio"> อื่นๆ (โปรดระบุ):</label>
+                    <input type="text" class="other-input" name="business_type_other" id="biz_other_text" placeholder="ระบุประเภทธุรกิจ" disabled>
+                </li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="q-label required">จำนวนบุคลากรในองค์กรของท่าน</div>
+            <div class="q-hint">กรุณาเลือก 1 ข้อ</div>
+            <ul class="option-list">
+                <li><label><input type="radio" name="org_size" value="1–10 คน (Micro)" required> 1–10 คน (Micro)</label></li>
+                <li><label><input type="radio" name="org_size" value="11–50 คน (Small)"> 11–50 คน (Small)</label></li>
+                <li><label><input type="radio" name="org_size" value="51–200 คน (Medium)"> 51–200 คน (Medium)</label></li>
+                <li><label><input type="radio" name="org_size" value="มากกว่า 200 คน (Large)"> มากกว่า 200 คน (Large)</label></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ส่วนที่ 2 -->
+    <div class="section">
+        <div class="section-title"><span class="num">2</span> พื้นฐานและประสบการณ์ด้านปัญญาประดิษฐ์ (AI)</div>
+
+        <!-- 2.1 -->
+        <div class="question">
+            <div class="q-label required">2.1 ท่านมีประสบการณ์ในการใช้เครื่องมือ AI ในการทำงานหรือไม่?</div>
+            <div class="q-hint">กรุณาเลือก 1 ข้อ</div>
+            <ul class="option-list">
+                <li><label><input type="radio" name="ai_exp" value="ยังไม่เคยใช้งาน" required> ยังไม่เคยใช้งาน</label></li>
+                <li><label><input type="radio" name="ai_exp" value="เคยทดลองใช้งานบ้าง แต่ยังไม่ได้ใช้เป็นประจำ"> เคยทดลองใช้งานบ้าง แต่ยังไม่ได้ใช้เป็นประจำ</label></li>
+                <li><label><input type="radio" name="ai_exp" value="ใช้งานเป็นประจำ (สัปดาห์ละหลายครั้ง)"> ใช้งานเป็นประจำ (สัปดาห์ละหลายครั้ง)</label></li>
+                <li><label><input type="radio" name="ai_exp" value="ใช้งานทุกวัน เป็นส่วนหนึ่งของกระบวนการทำงาน"> ใช้งานทุกวัน เป็นส่วนหนึ่งของกระบวนการทำงาน</label></li>
+            </ul>
+        </div>
+
+        <!-- 2.2 -->
+        <div class="question">
+            <div class="q-label required">2.2 เครื่องมือ AI ที่ท่านเคยใช้งาน</div>
+            <div class="q-hint">กรุณาเลือกได้มากกว่า 1 ข้อ</div>
+            <ul class="option-list">
+                <li><label><input type="checkbox" name="ai_tools" value="ChatGPT (OpenAI)"> ChatGPT (OpenAI)</label></li>
+                <li><label><input type="checkbox" name="ai_tools" value="Claude (Anthropic)"> Claude (Anthropic)</label></li>
+                <li><label><input type="checkbox" name="ai_tools" value="Gemini (Google)"> Gemini (Google)</label></li>
+                <li><label><input type="checkbox" name="ai_tools" value="Perplexity"> Perplexity</label></li>
+                <li><label><input type="checkbox" name="ai_tools" value="Copilot (Microsoft)"> Copilot (Microsoft)</label></li>
+                <li><label><input type="checkbox" name="ai_tools" value="NotebookLM (Google)"> NotebookLM (Google)</label></li>
+                <li><label><input type="checkbox" name="ai_tools" value="Canva AI / Magic Studio"> Canva AI / Magic Studio</label></li>
+                <li><label><input type="checkbox" name="ai_tools" value="LINE AI / Chatbot ต่างๆ"> LINE AI / Chatbot ต่างๆ</label></li>
+                <li><label><input type="checkbox" name="ai_tools" value="ยังไม่เคยใช้งานเครื่องมือ AI ใดมาก่อน" id="ai_tools_none"> ยังไม่เคยใช้งานเครื่องมือ AI ใดมาก่อน</label></li>
+                <li>
+                    <label><input type="checkbox" name="ai_tools" value="อื่นๆ" id="ai_tools_other_cb"> อื่นๆ (กรุณาระบุ):</label>
+                    <input type="text" class="other-input" name="ai_tools_other" id="ai_tools_other_text" placeholder="ระบุเครื่องมือ AI" disabled>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 2.3 -->
+        <div class="question">
+            <div class="q-label required">2.3 ท่านประเมินระดับความชำนาญด้าน AI ของท่านอยู่ในระดับใด?</div>
+            <div class="q-hint">กรุณาเลือก 1 ข้อ</div>
+            <ul class="option-list">
+                <li><label><input type="radio" name="ai_level" value="ระดับ 1: เริ่มต้น" required> <span><strong>ระดับ 1: เริ่มต้น</strong> — ยังไม่เคยใช้งาน AI หรือเพิ่งเริ่มทดลองใช้ ต้องการเรียนรู้ตั้งแต่พื้นฐาน</span></label></li>
+                <li><label><input type="radio" name="ai_level" value="ระดับ 2: พื้นฐาน"> <span><strong>ระดับ 2: พื้นฐาน</strong> — เคยใช้ AI สำหรับการถาม-ตอบทั่วไป แต่ยังไม่ได้นำไปประยุกต์ใช้กับงานอย่างเป็นระบบ</span></label></li>
+                <li><label><input type="radio" name="ai_level" value="ระดับ 3: ใช้งานได้ดี"> <span><strong>ระดับ 3: ใช้งานได้ดี</strong> — ใช้ AI ช่วยในงานประจำได้ (ร่างอีเมล สรุปข้อมูล สร้างเนื้อหา) แต่ประสงค์จะเรียนรู้เทคนิคเพิ่มเติม</span></label></li>
+                <li><label><input type="radio" name="ai_level" value="ระดับ 4: ชำนาญ"> <span><strong>ระดับ 4: ชำนาญ</strong> — ใช้ AI หลายเครื่องมือเป็นประจำ มีความรู้ด้าน Prompt Engineering และต้องการเรียนรู้ขั้นสูง เช่น AI Agent</span></label></li>
+            </ul>
+        </div>
+
+        <!-- 2.4 -->
+        <div class="question">
+            <div class="q-label required">2.4 ซอฟต์แวร์หรือเครื่องมือที่ท่านใช้ในการทำงานเป็นประจำ</div>
+            <div class="q-hint">กรุณาเลือกได้มากกว่า 1 ข้อ</div>
+            <ul class="option-list">
+                <li><label><input type="checkbox" name="work_tools" value="Microsoft Excel / Word / PowerPoint"> Microsoft Excel / Word / PowerPoint</label></li>
+                <li><label><input type="checkbox" name="work_tools" value="Google Sheets / Docs / Slides"> Google Sheets / Docs / Slides</label></li>
+                <li><label><input type="checkbox" name="work_tools" value="LINE (สื่อสารภายในองค์กร / ส่งเอกสาร)"> LINE (สื่อสารภายในองค์กร / ส่งเอกสาร)</label></li>
+                <li><label><input type="checkbox" name="work_tools" value="Facebook / Instagram / TikTok (งานการตลาด)"> Facebook / Instagram / TikTok (งานการตลาด)</label></li>
+                <li><label><input type="checkbox" name="work_tools" value="ซอฟต์แวร์บัญชี (PEAK, Express, FlowAccount ฯลฯ)"> ซอฟต์แวร์บัญชี (PEAK, Express, FlowAccount ฯลฯ)</label></li>
+                <li><label><input type="checkbox" name="work_tools" value="Canva / ซอฟต์แวร์ออกแบบกราฟิก"> Canva / ซอฟต์แวร์ออกแบบกราฟิก</label></li>
+                <li>
+                    <label><input type="checkbox" name="work_tools" value="อื่นๆ" id="work_tools_other_cb"> อื่นๆ (กรุณาระบุ):</label>
+                    <input type="text" class="other-input" name="work_tools_other" id="work_tools_other_text" placeholder="ระบุซอฟต์แวร์" disabled>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ส่วนที่ 3 -->
+    <div class="section">
+        <div class="section-title"><span class="num">3</span> หัวข้อที่ท่านประสงค์จะเรียนรู้</div>
+        <div class="q-hint" style="margin-bottom:14px;">กรุณาเลือกหัวข้อที่ท่านสนใจมากที่สุด (สามารถเลือกได้มากกว่า 1 ข้อ)</div>
+
+        <table class="topic-table">
+            <thead>
+                <tr>
+                    <th>เลือก</th>
+                    <th>หัวข้อ</th>
+                    <th>เครื่องมือ AI ที่จะได้เรียน</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" name="topics" value="รู้จัก AI แต่ละประเภท เลือกใช้ให้เหมาะกับงาน"></td>
+                    <td>รู้จัก AI แต่ละประเภท เลือกใช้ให้เหมาะกับงาน</td>
+                    <td>
+                        <span class="tool-tag">ChatGPT-5</span>
+                        <span class="tool-tag">Claude</span>
+                        <span class="tool-tag">Gemini</span>
+                        <span class="tool-tag">Perplexity</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="topics" value="เทคนิคสั่งงาน AI ให้ได้ผลลัพธ์ตรงใจ (Prompt Engineering)"></td>
+                    <td>เทคนิคสั่งงาน AI ให้ได้ผลลัพธ์ตรงใจ (Prompt Engineering)</td>
+                    <td>
+                        <span class="tool-tag">ChatGPT</span>
+                        <span class="tool-tag">Claude</span>
+                        <span class="tool-tag">Gemini</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="topics" value="วิเคราะห์ข้อมูลธุรกิจ สร้างรายงานและ Dashboard ด้วย AI"></td>
+                    <td>วิเคราะห์ข้อมูลธุรกิจ สร้างรายงานและ Dashboard ด้วย AI</td>
+                    <td>
+                        <span class="tool-tag">Claude in Excel</span>
+                        <span class="tool-tag">Google Sheets + Gemini</span>
+                        <span class="tool-tag">PEAK</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="topics" value="สร้างคลังความรู้ธุรกิจ สไลด์นำเสนอ และ Podcast อัตโนมัติ"></td>
+                    <td>สร้างคลังความรู้ธุรกิจ สไลด์นำเสนอ และ Podcast อัตโนมัติ</td>
+                    <td>
+                        <span class="tool-tag">NotebookLM</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="topics" value="สร้างสื่อโฆษณา แบนเนอร์ อินโฟกราฟิก ด้วย AI"></td>
+                    <td>สร้างสื่อโฆษณา แบนเนอร์ อินโฟกราฟิก ด้วย AI</td>
+                    <td>
+                        <span class="tool-tag">NanaBanana</span>
+                        <span class="tool-tag">Gemini</span>
+                        <span class="tool-tag">Canva AI</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="topics" value="สแกนเอกสาร ถอดเสียงประชุม สร้าง AI เฉพาะธุรกิจ"></td>
+                    <td>สแกนเอกสาร ถอดเสียงประชุม สร้าง AI เฉพาะธุรกิจ</td>
+                    <td>
+                        <span class="tool-tag">Claude OCR</span>
+                        <span class="tool-tag">Whisper</span>
+                        <span class="tool-tag">Custom GPT</span>
+                        <span class="tool-tag">Gemini Gems</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="topics" value="AI Desktop Agent จัดการไฟล์ สร้างรายงาน เชื่อมต่อระบบงาน"></td>
+                    <td>AI Desktop Agent จัดการไฟล์ สร้างรายงาน เชื่อมต่อระบบงาน</td>
+                    <td>
+                        <span class="tool-tag">Claude Cowork (Opus 4.6)</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ส่วนที่ 4 -->
+    <div class="section">
+        <div class="section-title"><span class="num">4</span> ความคาดหวังและข้อเสนอแนะ</div>
+
+        <!-- 4.1 -->
+        <div class="question">
+            <div class="q-label">4.1 สิ่งที่ท่านคาดหวังจากการเข้าร่วมอบรมครั้งนี้มากที่สุด</div>
+            <div class="q-hint">สามารถเลือกได้มากกว่า 1 ข้อ</div>
+            <ul class="option-list">
+                <li><label><input type="checkbox" name="expectations" value="เรียนรู้พื้นฐาน AI และเริ่มต้นใช้งานได้"> เรียนรู้พื้นฐาน AI และเริ่มต้นใช้งานได้</label></li>
+                <li><label><input type="checkbox" name="expectations" value="ลดระยะเวลาการทำงานที่ซ้ำซากด้วย AI"> ลดระยะเวลาการทำงานที่ซ้ำซากด้วย AI</label></li>
+                <li><label><input type="checkbox" name="expectations" value="สามารถวิเคราะห์ข้อมูลธุรกิจได้ดียิ่งขึ้น"> สามารถวิเคราะห์ข้อมูลธุรกิจได้ดียิ่งขึ้น</label></li>
+                <li><label><input type="checkbox" name="expectations" value="สร้างสื่อประชาสัมพันธ์และคอนเทนต์ได้ด้วยตนเอง"> สร้างสื่อประชาสัมพันธ์และคอนเทนต์ได้ด้วยตนเอง</label></li>
+                <li><label><input type="checkbox" name="expectations" value="นำ AI ไปประยุกต์ใช้กับทีมงานภายในองค์กร"> นำ AI ไปประยุกต์ใช้กับทีมงานภายในองค์กร</label></li>
+                <li><label><input type="checkbox" name="expectations" value="เรียนรู้เครื่องมือ AI รุ่นล่าสุดที่เพิ่งเปิดตัว"> เรียนรู้เครื่องมือ AI รุ่นล่าสุดที่เพิ่งเปิดตัว</label></li>
+                <li>
+                    <label><input type="checkbox" name="expectations" value="อื่นๆ" id="exp_other_cb"> อื่นๆ (กรุณาระบุ):</label>
+                    <input type="text" class="other-input" name="expectations_other" id="exp_other_text" placeholder="ระบุความคาดหวัง" disabled>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 4.2 -->
+        <div class="question">
+            <div class="q-label">4.2 อุปกรณ์ที่ท่านจะนำมาใช้ในการอบรม</div>
+            <div class="q-hint">สามารถเลือกได้มากกว่า 1 ข้อ</div>
+            <ul class="option-list">
+                <li><label><input type="checkbox" name="devices" value="คอมพิวเตอร์แบบพกพา (Notebook / Laptop)"> คอมพิวเตอร์แบบพกพา (Notebook / Laptop)</label></li>
+                <li><label><input type="checkbox" name="devices" value="แท็บเล็ต (iPad / Android Tablet)"> แท็บเล็ต (iPad / Android Tablet)</label></li>
+                <li><label><input type="checkbox" name="devices" value="สมาร์ทโฟน"> สมาร์ทโฟน</label></li>
+                <li><label><input type="checkbox" name="devices" value="ยังไม่ได้กำหนด"> ยังไม่ได้กำหนด</label></li>
+            </ul>
+        </div>
+
+        <!-- 4.3 -->
+        <div class="question">
+            <div class="q-label">4.3 หากท่านมีหัวข้อที่ประสงค์ให้คณะวิทยากรเน้นเป็นพิเศษ หรือมีคำถามที่ต้องการสอบถามล่วงหน้า กรุณาระบุด้านล่าง</div>
+            <div class="q-hint">ไม่บังคับ</div>
+            <textarea name="suggestions" placeholder="พิมพ์ข้อความของท่านที่นี่..."></textarea>
+        </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-wrap">
+        <button type="submit" class="btn-submit" id="submitBtn">ส่งแบบสำรวจ</button>
+    </div>
+</form>
+
+<div class="footer">
+    ขอขอบพระคุณที่สละเวลากรอกแบบสำรวจ<br>
+    Innovate AI Co., Ltd. | <a href="https://innovateai.co.th" target="_blank">innovateai.co.th</a>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<script>
+    // === CONFIGURATION ===
+    // เปลี่ยน URL นี้เป็น Web App URL จาก Google Apps Script
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzd_c2RHIy7jAPujVvU7pH3E_NBNcc_3VlNT3tsessksBKZz7To-SlZ4b9YNyglN2tT/exec';
+
+    // === Other input toggle ===
+    function setupOtherToggle(radioName, otherRadioId, otherTextId) {
+        const radios = document.querySelectorAll(`input[name="${radioName}"]`);
+        const otherText = document.getElementById(otherTextId);
+        radios.forEach(r => {
+            r.addEventListener('change', () => {
+                otherText.disabled = r.id !== otherRadioId || !r.checked;
+                if (!otherText.disabled) otherText.focus();
+            });
+        });
+    }
+
+    function setupOtherToggleCb(cbId, textId) {
+        const cb = document.getElementById(cbId);
+        const text = document.getElementById(textId);
+        cb.addEventListener('change', () => {
+            text.disabled = !cb.checked;
+            if (!text.disabled) text.focus();
+        });
+    }
+
+    setupOtherToggle('business_type', 'biz_other_radio', 'biz_other_text');
+    setupOtherToggleCb('ai_tools_other_cb', 'ai_tools_other_text');
+    setupOtherToggleCb('work_tools_other_cb', 'work_tools_other_text');
+    setupOtherToggleCb('exp_other_cb', 'exp_other_text');
+
+    // "ยังไม่เคยใช้" unchecks others
+    document.getElementById('ai_tools_none').addEventListener('change', function() {
+        if (this.checked) {
+            document.querySelectorAll('input[name="ai_tools"]').forEach(cb => {
+                if (cb !== this) cb.checked = false;
+            });
+            document.getElementById('ai_tools_other_text').disabled = true;
+        }
+    });
+    document.querySelectorAll('input[name="ai_tools"]').forEach(cb => {
+        if (cb.id !== 'ai_tools_none') {
+            cb.addEventListener('change', function() {
+                if (this.checked) document.getElementById('ai_tools_none').checked = false;
+            });
+        }
+    });
+
+    // === Collect checked values ===
+    function getChecked(name) {
+        return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+    }
+
+    // === Toast ===
+    function showToast(msg, isError) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = 'toast show' + (isError ? ' error' : '');
+        setTimeout(() => t.className = 'toast', 4000);
+    }
+
+    // === Submit ===
+    function handleSubmit(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = 'กำลังส่ง...';
+
+        // Build business type value
+        let bizType = document.querySelector('input[name="business_type"]:checked')?.value || '';
+        if (bizType === 'อื่นๆ') {
+            const other = document.getElementById('biz_other_text').value.trim();
+            bizType = other ? 'อื่นๆ: ' + other : 'อื่นๆ';
+        }
+
+        // Build AI tools
+        let aiTools = getChecked('ai_tools');
+        const aiToolsOtherIdx = aiTools.indexOf('อื่นๆ');
+        if (aiToolsOtherIdx > -1) {
+            const other = document.getElementById('ai_tools_other_text').value.trim();
+            aiTools[aiToolsOtherIdx] = other ? 'อื่นๆ: ' + other : 'อื่นๆ';
+        }
+
+        // Build work tools
+        let workTools = getChecked('work_tools');
+        const workToolsOtherIdx = workTools.indexOf('อื่นๆ');
+        if (workToolsOtherIdx > -1) {
+            const other = document.getElementById('work_tools_other_text').value.trim();
+            workTools[workToolsOtherIdx] = other ? 'อื่นๆ: ' + other : 'อื่นๆ';
+        }
+
+        // Build expectations
+        let expectations = getChecked('expectations');
+        const expOtherIdx = expectations.indexOf('อื่นๆ');
+        if (expOtherIdx > -1) {
+            const other = document.getElementById('exp_other_text').value.trim();
+            expectations[expOtherIdx] = other ? 'อื่นๆ: ' + other : 'อื่นๆ';
+        }
+
+        const payload = {
+            timestamp: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }),
+            fullname: document.querySelector('input[name="fullname"]').value.trim(),
+            company: document.querySelector('input[name="company"]').value.trim(),
+            position: document.querySelector('input[name="position"]').value.trim(),
+            business_type: bizType,
+            org_size: document.querySelector('input[name="org_size"]:checked')?.value || '',
+            ai_exp: document.querySelector('input[name="ai_exp"]:checked')?.value || '',
+            ai_tools: aiTools.join(', '),
+            ai_level: document.querySelector('input[name="ai_level"]:checked')?.value || '',
+            work_tools: workTools.join(', '),
+            topics: getChecked('topics').join(', '),
+            expectations: expectations.join(', '),
+            devices: getChecked('devices').join(', '),
+            suggestions: document.querySelector('textarea[name="suggestions"]').value.trim()
+        };
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(() => {
+            showToast('✓ ส่งแบบสำรวจเรียบร้อยแล้ว ขอบคุณครับ/ค่ะ', false);
+            document.getElementById('surveyForm').reset();
+            document.querySelectorAll('.other-input').forEach(el => el.disabled = true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        })
+        .catch(() => {
+            showToast('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', true);
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.textContent = 'ส่งแบบสำรวจ';
+        });
+
+        return false;
+    }
+</script>
+
+</body>
+</html>
